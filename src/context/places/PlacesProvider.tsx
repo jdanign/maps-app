@@ -3,6 +3,7 @@ import { PlacesContext } from "./PlacesContext";
 import { placesReducer } from "./placesReducer";
 import { getUserLocation } from "../../helpers";
 
+
 export interface PlacesState {
     isLoading: boolean;
     userLocation?: [number, number];
