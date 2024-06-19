@@ -1,6 +1,7 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { PlacesContext } from "./PlacesContext";
 import { placesReducer } from "./placesReducer";
+import { getUserLocation } from "../../helpers";
 
 export interface PlacesState {
     isLoading: boolean;
@@ -22,6 +23,15 @@ const INITIAL_STATE:PlacesState = {
 /** Proveedor de estado: Es la información almacenada. */
 export const PlacesProvider = ({children}:Props)=>{
     const [state, dispatch] = useReducer(placesReducer, INITIAL_STATE);
+
+    useEffect(() => {
+        // Obtiene la geolocalización del usuario al cargar el provider
+        getUserLocation().then(longLat => dispatch({
+            type: 'setUserLocation', 
+            payload: longLat
+        }));
+    }, [])
+    
 
     return (
         <PlacesContext.Provider value={{

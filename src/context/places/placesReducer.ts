@@ -7,6 +7,7 @@ type PlacesAction = {
 };
 
 
+/** Reducer de las acciones disponibles. */
 export const placesReducer = (state:PlacesState, action:PlacesAction):PlacesState=>{
     switch (action.type){
         case 'setUserLocation':

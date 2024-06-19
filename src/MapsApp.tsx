@@ -1,10 +1,14 @@
 import { PlacesProvider } from "./context"
+import { HomeScreen } from "./screens";
+
+import 'mapbox-gl/dist/mapbox-gl.css';
+import './css/styles.css';
 
 
 function MapsApp() {
   return (
     <PlacesProvider>
-      <h1>Hola mapas</h1>
+      <HomeScreen />
     </PlacesProvider>
   )
 }
