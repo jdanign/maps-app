@@ -7,3 +7,20 @@
     top: 0;
     width: 100vw;
 }
+
+
+.btn-bg-color {
+    background-color: #61DAFB;
+    border: #61DAFB;
+}
+
+
+.btn-bg-color:hover {
+    background-color: #2bb0d4;
+    border: #2bb0d4;
+}
+
+
+.btn-text-color {
+    color: #61DAFB;
+}
