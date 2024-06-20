@@ -1,4 +1,6 @@
+import { useContext, useState } from "react"
 import { Feature } from "../interfaces/places"
+import { MapContext } from "../context"
 
 
 type Props = {
@@ -7,16 +9,38 @@ type Props = {
 
 
 export const SearchResultsList = ({places}:Props)=>{
+    const {map} = useContext(MapContext);
+
+    const [activeId, setActiveId] = useState('');
+
+
+    /** Establece la funcionalidad para que el mapa se traslade al lugar de la lista clicado. */
+    const onPlaceClicked = (place:Feature)=>{
+        const [lng, lat] = place.center;
+
+        setActiveId(place.id);
+
+        map?.flyTo({
+            zoom: 14,
+            center: [lng, lat]
+        })
+    }
+
+
     return (places.length ? 
         <ul className="list-group">
             {
                 places.map(place => (
-                    <li key={place.id} className="list-group-item list-group-item-action">
+                    <li 
+                        key={place.id} 
+                        onClick={()=> onPlaceClicked(place)}
+                        className={`list-group-item list-group-item-light pointer ${activeId === place.id ? 'active' : ''}`}
+                    >
                         <h6 className="mb-1">{place.text_es}</h6>
-                        <p className="text-muted mb-1" style={{fontSize:'12px'}}>
+                        <p className={`${activeId === place.id ? 'text-light' : 'text-muted'} mb-1`} style={{fontSize:'12px'}}>
                             {place.place_name_es}
                         </p>
-                        <button className="btn btn-outline-primary btn-sm btn-outline-color">
+                        <button className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary btn-outline-color'}`}>
                             Direcciones
                         </button>
                     </li>

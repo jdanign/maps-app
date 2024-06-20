@@ -49,9 +49,11 @@ export const PlacesProvider = ({children}:Props)=>{
      * @returns Listado de resultados de búsqueda o 'undefined'.
      */
     const searchPlacesByTerm = async (query:string):Promise<Feature[] | undefined>=>{
-        if (query.length === 0)
-            console.log({query});
-            // TODO: Limpiar state
+        let result:Feature[] = [];
+
+        if (query.length === 0){
+            dispatch({type: 'clearPlaces'})
+        }
         else if (!state.userLocation)
             throw new Error('No existe la ubicación del usuario');
         else{
@@ -63,10 +65,12 @@ export const PlacesProvider = ({children}:Props)=>{
                 }
             });
 
-            dispatch({type: 'setPlaces', payload: resp.data.features})
+            dispatch({type: 'setPlaces', payload: resp.data.features});
 
-            return resp.data.features;
-        } 
+            result = resp.data.features;
+        }
+
+        return result;
     }
     
 
