@@ -21,6 +21,30 @@
 }
 
 
-.btn-text-color {
+.btn-outline-color {
     color: #61DAFB;
+    border-color: #61DAFB;
+}
+
+
+.btn-outline-color:hover {
+    color: white;
+    border-color: #61DAFB;
+    background-color: #61DAFB;
+}
+
+
+.floating-elements {
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2))
+}
+
+
+.search-container {
+    background-color: whitesmoke;
+    border-radius: 5px;
+    left: 20px;
+    position: fixed;
+    top: 20px;
+    width: 250px;
+    z-index: 999;
 }

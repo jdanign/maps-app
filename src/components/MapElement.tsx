@@ -35,7 +35,6 @@ export const MapElement = ()=>{
                 width: '100vw',
             }}
         >
-            {userLocation?.join(',')}
         </div>
     )
 }

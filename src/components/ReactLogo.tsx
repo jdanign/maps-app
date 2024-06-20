@@ -6,6 +6,7 @@ export const ReactLogo = ()=>{
         <img 
             src={reactLogo} 
             alt="Logo de react" 
+            className='floating-elements'
             style={{
                 position: 'fixed',
                 bottom: '30px',

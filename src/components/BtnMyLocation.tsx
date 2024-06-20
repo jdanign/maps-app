@@ -23,7 +23,7 @@ export const BtnMyLocation = ()=>{
     return (
         <button 
             onClick={onClick}
-            className="btn btn-primary btn-bg-color"
+            className="btn btn-primary btn-bg-color floating-elements"
             style={{
                 position: 'fixed',
                 top: '20px',
