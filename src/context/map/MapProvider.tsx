@@ -1,5 +1,5 @@
 import { useContext, useEffect, useReducer } from "react";
-import { Map, Marker, Popup } from "mapbox-gl";
+import { AnyLayer, AnySourceData, LngLatBounds, Map, Marker, Popup } from "mapbox-gl";
 
 import { MapContext } from "./MapContext";
 import { mapReducer } from "./MapReducer";
@@ -82,13 +82,58 @@ export const MapProvider = ({children}:Props)=>{
 
 
     const getRouteBetweenPoints = async (start:[number, number], end:[number, number])=>{
+        // Obtiene y procesa los datos de la ruta
         const resp = await directionsApi.get<DirectionsResponse>(`/${start.join(',')};${end.join(',')}`);
         const {distance, duration, geometry} = resp.data.routes[0];
-        console.log({resp});
         const kms = Math.round(distance / 1000 * 100) / 100;
         const minutes = Math.floor(duration / 60);
 
         console.log({distance, kms, minutes});
+
+        // El mapa se coloca para mostrar el punto de origen y el de destino
+        const bounds =  new LngLatBounds(start, start);
+        for (const coord of geometry.coordinates) {
+            const newCoord:[number, number] = [coord[0], coord[1]];
+            bounds.extend(newCoord);
+        }
+        state.map?.fitBounds(bounds, {padding:50});
+
+        // Establece la polilinea
+        // Elimina la ruta si ya existe una previa
+        if (state.map?.getLayer('RouteString')){
+            state.map.removeSource('RouteString');
+            state.map.removeLayer('RouteString');
+        }
+        // Dibuja la linea en el mapa
+        state.map?.addSource('RouteString', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: geometry.coordinates,
+                        }
+                    }
+                ]
+            }
+        } as AnySourceData);
+        state.map?.addLayer({
+            id: 'RouteString',
+            type: 'line',
+            source: 'RouteString',
+            layout: {
+                'line-cap': 'round',
+                'line-join': 'round',
+            },
+            paint: {
+                'line-color': 'black',
+                'line-width': 3,
+            }
+        } as AnyLayer);
     }
     
 
