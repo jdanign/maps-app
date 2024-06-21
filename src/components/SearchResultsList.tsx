@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { Feature } from "../interfaces/places"
-import { MapContext } from "../context"
+import { MapContext, PlacesContext } from "../context"
 
 
 type Props = {
@@ -9,7 +9,8 @@ type Props = {
 
 
 export const SearchResultsList = ({places}:Props)=>{
-    const {map} = useContext(MapContext);
+    const {userLocation} = useContext(PlacesContext);
+    const {map, getRouteBetweenPoints} = useContext(MapContext);
 
     const [activeId, setActiveId] = useState('');
 
@@ -27,6 +28,15 @@ export const SearchResultsList = ({places}:Props)=>{
     }
 
 
+    const getRoute = (place:Feature)=>{
+        if (userLocation){
+            const [lng, lat] = place.center;
+
+            getRouteBetweenPoints(userLocation, [lng, lat]);
+        }
+    }
+
+
     return (places.length ? 
         <ul className="list-group">
             {
@@ -40,7 +50,10 @@ export const SearchResultsList = ({places}:Props)=>{
                         <p className={`${activeId === place.id ? 'text-light' : 'text-muted'} mb-1`} style={{fontSize:'12px'}}>
                             {place.place_name_es}
                         </p>
-                        <button className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary btn-outline-color'}`}>
+                        <button 
+                            onClick={()=> getRoute(place)}
+                            className={`btn btn-sm ${activeId === place.id ? 'btn-outline-light' : 'btn-outline-primary btn-outline-color'}`}
+                        >
                             Direcciones
                         </button>
                     </li>
